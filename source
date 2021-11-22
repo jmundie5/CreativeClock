@@ -1,0 +1,106 @@
+//Create Array for Stars
+var stars = [];
+//Create Canvas and Stars at random locations
+function setup() {
+  createCanvas(480,480);
+	for (var i = 0; i < 1000; i++) {
+		stars[i] = new Star();
+	}
+}
+//Main test time and draw calls
+function draw() {
+	//preload();
+  background(0);
+	//textFont(myFont);
+  var sec = second();
+  var min = minute();
+  var hrs = hour();
+  strokeWeight(10);
+  var mer = hrs < 12 ? "am":"pm";
+  sec = formatting(sec);
+  min = formatting(min);
+  hrs = formatting(hrs % 12);
+	//Time check for background switch
+	if (hrs > 5){
+  background("black");
+	for (var i = 0; i < stars.length; i++) {
+		stars[i].draw();
+	stroke(0, 0, 0);
+	}
+  }
+  
+  else if (hrs < 3){
+    background("black");
+		for (var i = 0; i < stars.length; i++) {
+			stars[i].draw();
+		stroke(0, 0, 0);
+	}
+  }
+  
+  else {
+		background(178,255,246);
+		strokeWeight(5);
+   	sun();
+	  strokeWeight(10);
+		stroke(173, 216, 230);
+  }
+
+	//Time print
+  fill(255);
+  textSize(60);
+  textAlign(CENTER, CENTER);
+	//stroke(173, 216, 230);
+  text(hrs + "\n" + min + "\n" + sec +
+       " " +"\n"+ mer, width/2, height/2);
+	
+
+	
+	
+	
+}
+//function I found online for setting correct 0's in time 
+function formatting(num){
+    
+  if(int(num) < 10) {
+
+    return "0" + num;
+  }
+
+  return num;
+}
+//Creates and slowly rotates sun
+function sun() {
+
+  fill(245, 187, 87);
+  stroke(245, 187, 87);
+  push();
+  translate(100, 80);
+  rotate(radians(frameCount / 3));
+  ellipse(0, 0, 60, 60);
+  line(0, -60, 0, -40);
+  line(0, 40, 0, 60);
+  line(-45, -45, -30, -30);
+  line(45, -45, 30, -30);
+  line(-60, 0, -40, 0);
+  line(40, 0, 60, 0);
+  line(-45, 45, -30, 30);
+  line(45, 45, 30, 30);
+  pop();
+}
+
+//Star constructor for array
+class Star {
+	constructor() {
+		this.x = random(width);
+		this.y = random(height);
+		this.size = random(0.25, 3);
+		this.t = random(TAU);
+	}
+	//Star specific draw command
+	draw() {
+		this.t += 0.04;
+		var scale = this.size + sin(this.t) * 2;
+		noStroke();
+		ellipse(this.x, this.y, scale, scale);
+	}
+}
